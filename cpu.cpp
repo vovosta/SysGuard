@@ -1,8 +1,9 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
-#include "cpu.h"
 #include <vector>
+#include "cpu.h"
+
 
 CPU cpu_data(){
 	CPU cpu;
@@ -24,15 +25,15 @@ CPU cpu_data(){
 	std::cout << "Total: " << count << '\n';
 	// Now we will scan an other time the file to get all of the name to after access the date that we need
 	// We will use these data later to do the average of the temperatures from all of the sondes the CPU/core have
-	double total_temperature;
-	int total_count_temperature;
+	double total_temperature = 0;
+	int total_count_temperature = 0;
 	// Here we scan the file to get every paths possible
 	for (const auto& path:paths){
 		// Here we will scan every hwmon in the root hwmon directory (for example we can have hwmon1, hwmon2, hwmon3 etc)
 		for (const auto& entry : std::filesystem::directory_iterator(path)){
 			std::string filename = entry.path().filename().string();
 			// We will now check if the file if a file where is temperature, because not all files in hwmon are temperature files (there are also fan speed etc)
-			if (filename.starts_with("temp") && (filename.ends_with("_input"){
+			if (filename.starts_with("temp") && filename.ends_with("_input")){
 				// Here we open the file
 				std::ifstream file(entry.path());
 				// We create the variable where we will store the temperature's value
@@ -42,7 +43,7 @@ CPU cpu_data(){
 				// We do this operation to get °C and M°C
 				temperature /= 1000.0;
 				total_count_temperature++;
-				total_temparature = total_temperature + temperature;
+				total_temperature = total_temperature + temperature;
 				}	
 		}
 		
